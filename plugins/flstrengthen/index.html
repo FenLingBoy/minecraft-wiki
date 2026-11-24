@@ -23,7 +23,7 @@
       <kbd class="search-key">/</kbd>
       <div class="search-results" id="search-results" hidden></div>
     </div>
-    <span class="version-badge">v1.0.0</span>
+    <span class="version-badge">v1.1.0</span>
   </header>
   <div class="shell">
     <div class="sidebar-scrim" id="sidebar-scrim"></div>
@@ -47,7 +47,7 @@
       </nav>
       <div class="sidebar-foot">
         <span>构建产物</span>
-        <code>target/FlStrengthen-1.0.0.jar</code>
+        <code>target/FlStrengthen-1.1.0.jar</code>
       </div>
     </aside>
     <main class="content" id="article-host">
@@ -303,12 +303,24 @@ message-item:
               <p><code>%next_level%</code><span>下一等级</span></p>
               <p><code>%chance%</code><span>计算加成后的当前成功率</span></p>
               <p><code>%money%</code><span>配置中的费用</span></p>
-              <p><code>%requirements%</code><span>材料名称和数量</span></p>
+              <p><code>%requirements%</code><span>兼容写法，自动换行，每种材料一行，并显示需求与已有数量</span></p>
+              <p><code>%requirements_list%</code><span>纯多行材料列表，不会额外添加开头换行</span></p>
+              <p><code>%requirements_compact%</code><span>横向摘要，只显示材料名称和需求数量</span></p>
+              <p><code>%material_&lt;ID&gt;_have%</code><span>指定材料当前放在材料槽里的数量</span></p>
+              <p><code>%material_&lt;ID&gt;_need%</code><span>当前目标等级需要多少；不需要该材料时是 0</span></p>
+              <p><code>%material_&lt;ID&gt;_status%</code><span>当前数量/需求数量，例如 64/2</span></p>
               <p><code>%break%</code><span>失败是否可能损坏，显示“是”或“否”</span></p>
               <p><code>%downgrade%</code><span>失败降低几级</span></p>
               <p><code>%required_level%</code><span>进阶最低强度</span></p>
             </div>
             <p>百分比符号本身要写两个：<code>%chance%%</code> 会显示成“75%”。前面的 <code>%chance%</code> 是占位符，最后一个是普通百分号。</p>
+
+            <div class="callout callout-key">
+              <strong>材料需求现在会自动分成多行</strong>
+              <p>配置写 <code>'&amp;7所需材料: &amp;f%requirements%'</code>，界面会显示成材料标题，再逐个显示“测试强化石 x2 | 已有 64”。数量足够时整行偏绿色，不足时偏红色。</p>
+            </div>
+            <p>按材料 ID 查询时，把 <code>&lt;ID&gt;</code> 换成 <code>materials.yml</code> 里的键。例如强化石 ID 是 <code>strength-stone</code>，就可以使用 <code>%material_strength-stone_have%</code>、<code>%material_strength-stone_need%</code> 和 <code>%material_strength-stone_status%</code>。</p>
+            <p>这些数量只统计 GUI 材料槽，不统计玩家背包。所有已经在 <code>materials.yml</code> 登记的材料 ID 都可以使用。</p>
 
             <h2 id="gui-safety">界面操作规则</h2>
             <ul class="check-list">
@@ -1046,7 +1058,7 @@ files:
 
             <h2 id="install-steps">安装步骤</h2>
             <ol class="steps">
-              <li><strong>放入服务端</strong><p>把 <code>target/FlStrengthen-1.0.0.jar</code> 放进服务端的 <code>plugins/</code> 目录。</p></li>
+              <li><strong>放入服务端</strong><p>把 <code>target/FlStrengthen-1.1.0.jar</code> 放进服务端的 <code>plugins/</code> 目录。</p></li>
               <li><strong>完全重启</strong><p>第一次安装不要只执行 reload，停止服务端后重新启动。</p></li>
               <li><strong>检查控制台</strong><p>应看到加载了 1 个强化方案和 1 个进阶方案。</p></li>
               <li><strong>选择经济模式</strong><p>有 Vault 就保持默认；没有 Vault 就关闭经济检查。</p></li>
@@ -1086,7 +1098,7 @@ files:
         </aside>
       </div>
       <footer class="page-footer">
-        <span>FlStrengthen v1.0.0 · Minecraft 1.12 - 1.20</span>
+        <span>FlStrengthen v1.1.0 · Minecraft 1.12 - 1.20</span>
         <span>配置目录：<code>plugins/FlStrengthen/</code></span>
       </footer>
     </main>
