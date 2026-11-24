@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="我的世界 Wiki 大全：插件文档、服务端配置、兼容说明与排错知识库。">
+  <title>我的世界 Wiki 大全</title>
+  <link rel="stylesheet" href="assets/hub.css">
+</head>
+<body>
+  <a class="skip-link" href="#portal-main">跳到正文</a>
+  <header class="site-header">
+    <a class="hub-brand" href="index.html" aria-label="Minecraft Wiki 首页">
+      <span class="hub-mark">MC</span>
+      <span class="hub-brand-copy"><strong>方块档案</strong><small>Minecraft Wiki 大全</small></span>
+    </a>
+    <nav class="header-nav" aria-label="主导航">
+      <a href="index.html" aria-current="page">首页</a>
+      <a class="searchable" href="plugins/index.html" data-title="插件文档" data-group="分类目录" data-search="插件文档 FlStrengthen Paper Mohist Minecraft 强化">插件文档</a>
+      <a href="https://github.com/FenLingBoy/minecraft-wiki" target="_blank" rel="noreferrer">GitHub</a>
+    </nav>
+    <div class="hub-search">
+      <svg class="hub-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="hub-search-input" type="search" placeholder="搜索 Wiki 条目" autocomplete="off" aria-label="搜索 Wiki" aria-expanded="false">
+      <kbd>/</kbd>
+      <div class="hub-search-results" id="hub-search-results" hidden></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">MINECRAFT KNOWLEDGE INDEX</p>
+        <h1>我的世界 Wiki 大全</h1>
+        <p class="hero-lead">把插件说明、服务端配置和排错经验收在同一个地方。先选分类，再进入具体项目；每个项目保留自己的独立目录与完整文档。</p>
+        <div class="hero-actions">
+          <a class="primary-link searchable" href="plugins/flstrengthen/index.html" data-title="FlStrengthen 使用手册" data-group="插件文档" data-search="FlStrengthen 强化插件 安装 配置 材料 概率 进阶 GUI 命令 排错 API 1.12 1.20 Paper Mohist">浏览 FlStrengthen</a>
+          <a class="secondary-link searchable" href="#knowledge-tree" data-title="知识树" data-group="本站导航" data-search="知识树 分支 子分支 目录结构">查看知识树</a>
+        </div>
+      </div>
+      <div class="tree-panel" aria-label="站点知识树">
+        <div class="tree-panel-head"><span>KNOWLEDGE TREE</span><span>01 / 01 已收录</span></div>
+        <pre class="knowledge-tree"><span class="root">Minecraft Wiki 大全</span>
+├─ <a class="branch" href="plugins/index.html">插件文档</a>
+│  └─ <a href="plugins/flstrengthen/index.html">FlStrengthen</a>
+│     ├─ <a class="leaf" href="plugins/flstrengthen/index.html#quick-start">快速开始</a>
+│     ├─ <a class="leaf" href="plugins/flstrengthen/index.html#config">配置手册</a>
+│     ├─ <a class="leaf" href="plugins/flstrengthen/index.html#troubleshooting">故障排查</a>
+│     └─ <a class="leaf" href="plugins/flstrengthen/index.html#api">事件 API</a>
+├─ 服务端配置 <span class="leaf">整理中</span>
+├─ 开服基础 <span class="leaf">整理中</span>
+└─ 故障排查 <span class="leaf">整理中</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <div class="status-strip" aria-label="站点状态">
+    <div><strong>1</strong><span>已收录项目</span></div>
+    <div><strong>12</strong><span>FlStrengthen 章节</span></div>
+    <div><strong>1.12 - 1.20</strong><span>覆盖游戏版本</span></div>
+    <div><strong>静态</strong><span>GitHub Pages 部署</span></div>
+  </div>
+
+  <main class="portal-main" id="portal-main">
+    <div class="portal-layout">
+      <div>
+        <section aria-labelledby="channels-title">
+          <div class="section-head">
+            <h2 id="channels-title">按分类浏览</h2>
+            <p>先定位知识方向，再进入项目文档</p>
+          </div>
+          <div class="channel-grid">
+            <a class="channel is-live searchable" href="plugins/index.html" data-title="插件文档分类" data-group="分类目录" data-search="插件文档 插件教程 强化 经济 GUI 属性 API">
+              <span class="channel-kicker"><span>01 / PLUGINS</span><span class="badge">已上线</span></span>
+              <h3>插件文档</h3>
+              <p>单个插件的安装、配置字段、命令权限、机制说明和开发者接口。</p>
+            </a>
+            <div class="channel is-planned">
+              <span class="channel-kicker"><span>02 / SERVERS</span><span class="badge badge-planned">整理中</span></span>
+              <h3>服务端配置</h3>
+              <p>Paper、Mohist、Spigot 的版本选择、性能项与跨版本兼容记录。</p>
+            </div>
+            <div class="channel is-planned">
+              <span class="channel-kicker"><span>03 / BASICS</span><span class="badge badge-planned">整理中</span></span>
+              <h3>开服基础</h3>
+              <p>从 Java 环境、目录结构到首个可运行生存服的基础流程。</p>
+            </div>
+            <div class="channel is-planned">
+              <span class="channel-kicker"><span>04 / TROUBLESHOOTING</span><span class="badge badge-planned">整理中</span></span>
+              <h3>故障排查</h3>
+              <p>按报错、配置、权限和物品状态逐步定位问题，避免盲改配置。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="featured-project" aria-labelledby="featured-title">
+          <div class="section-head">
+            <h2 id="featured-title">最近收录</h2>
+            <p>FlStrengthen v1.0.0</p>
+          </div>
+          <article class="project-card">
+            <div class="project-cover">
+              <strong>FL</strong>
+              <span>STRENGTHEN<br>PLUGIN DOCS</span>
+            </div>
+            <div class="project-body">
+              <div class="project-heading">
+                <h3>FlStrengthen 使用手册</h3>
+                <span class="badge">完整</span>
+              </div>
+              <p>面向服主与配置人员的中文强化插件 Wiki。包含可直接执行的示例、逐字段解释、GUI 槽位图、失败保护机制、排错清单和 Bukkit 事件 API。</p>
+              <div class="tag-row">
+                <span>Minecraft 1.12 - 1.20</span>
+                <span>Paper</span>
+                <span>Mohist</span>
+                <span>Java 8</span>
+              </div>
+              <div class="project-links">
+                <a class="searchable" href="plugins/flstrengthen/index.html#quick-start" data-title="FlStrengthen 快速开始" data-group="FlStrengthen 使用手册" data-search="快速开始 安装 测试 命令 材料 强化">快速开始</a>
+                <a class="searchable" href="plugins/flstrengthen/index.html#recipes" data-title="FlStrengthen 强化方案配置" data-group="FlStrengthen 使用手册" data-search="强化方案 recipes 成功率 降级 损坏 属性 命令">强化方案</a>
+                <a class="searchable" href="plugins/flstrengthen/index.html#gui" data-title="FlStrengthen GUI 配置" data-group="FlStrengthen 使用手册" data-search="GUI 界面 槽位 按钮 信息物品 占位符">GUI 配置</a>
+                <a class="searchable" href="plugins/flstrengthen/index.html#troubleshooting" data-title="FlStrengthen 常见问题" data-group="FlStrengthen 使用手册" data-search="常见问题 排错 配置 加载 0 个方案 经济 属性">常见问题</a>
+                <a class="searchable" href="plugins/flstrengthen/index.html#api" data-title="FlStrengthen 开发者 API" data-group="FlStrengthen 使用手册" data-search="开发者 API 事件 Bukkit Listener">事件 API</a>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="knowledge-section" id="knowledge-tree" aria-labelledby="tree-title">
+          <div class="section-head">
+            <h2 id="tree-title">目录如何生长</h2>
+            <p>分类、项目、章节各自独立</p>
+          </div>
+          <div class="tree-panel">
+            <pre class="knowledge-tree"><span class="root">Minecraft Wiki 大全</span>
+└─ <span class="branch">插件文档</span>
+   └─ FlStrengthen
+      ├─ 开始使用
+      │  ├─ 快速开始
+      │  ├─ 安装与兼容
+      │  └─ 跑通第一次强化
+      ├─ 配置手册
+      │  ├─ config.yml
+      │  ├─ materials.yml
+      │  ├─ recipes
+      │  ├─ advancements
+      │  └─ gui
+      └─ 参考
+         ├─ 运行机制与安全
+         ├─ 命令与权限
+         ├─ 常见问题
+         └─ 开发者事件 API</pre>
+          </div>
+        </section>
+      </div>
+
+      <aside class="portal-aside">
+        <section class="aside-box" aria-labelledby="start-links">
+          <h2 id="start-links">从这里开始</h2>
+          <div class="aside-links">
+            <a class="searchable" href="plugins/flstrengthen/index.html#install" data-title="安装与兼容" data-group="FlStrengthen" data-search="安装 兼容 Paper Mohist Vault Java 1.12 1.20">安装与兼容</a>
+            <a class="searchable" href="plugins/flstrengthen/index.html#first-attempt" data-title="跑通第一次强化" data-group="FlStrengthen" data-search="第一次 强化 测试 材料 GUI 金币">跑通第一次强化</a>
+            <a class="searchable" href="plugins/flstrengthen/index.html#materials" data-title="材料配置" data-group="FlStrengthen" data-search="材料 materials.yml 通配符 显示名 Lore 概率">材料配置</a>
+            <a class="searchable" href="plugins/flstrengthen/index.html#advancements" data-title="进阶方案" data-group="FlStrengthen" data-search="进阶 advancements 奖励 required-level 成功率">进阶方案</a>
+            <a class="searchable" href="plugins/flstrengthen/index.html#commands" data-title="命令与权限" data-group="FlStrengthen" data-search="命令 权限 LuckPerms fls open reload">命令与权限</a>
+          </div>
+        </section>
+        <section class="aside-box" aria-labelledby="hub-structure">
+          <h2 id="hub-structure">独立存放规则</h2>
+          <pre class="mini-tree">plugins/
+└─ flstrengthen/
+   ├─ index.html
+   ├─ styles.css
+   └─ app.js</pre>
+          <div class="aside-note">
+            <p>每个项目使用自己的目录和静态资源。以后新增插件时，只在 <code>plugins/</code> 下增加子目录，不会影响已有文档。</p>
+          </div>
+        </section>
+        <section class="aside-box" aria-labelledby="source-note">
+          <h2 id="source-note">部署方式</h2>
+          <div class="aside-note">
+            <p>全站为纯静态 HTML、CSS 和 JavaScript，由 GitHub Pages 托管，不依赖后端服务或外部 CDN。</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>Minecraft Wiki 大全 · 方块档案</span>
+    <span>© <span id="current-year">2026</span> FenLingBoy · <a href="https://github.com/FenLingBoy/minecraft-wiki">查看源码</a></span>
+  </footer>
+  <script src="assets/hub.js"></script>
+</body>
+</html>

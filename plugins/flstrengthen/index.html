@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FlStrengthen Minecraft 强化插件中文使用手册">
+  <title>FlStrengthen 使用手册</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#article-host">跳到正文</a>
+  <header class="topbar">
+    <button class="icon-button mobile-only" id="menu-button" aria-label="打开目录" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <a class="brand" href="#quick-start" aria-label="返回快速开始">
+      <span class="brand-mark">FL</span>
+      <span class="brand-copy"><strong>FlStrengthen</strong><small>中文使用手册</small></span>
+    </a>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search-input" type="search" placeholder="搜索配置、命令或问题" autocomplete="off" aria-label="搜索 Wiki">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="search-results" hidden></div>
+    </div>
+    <span class="version-badge">v1.0.0</span>
+  </header>
+  <div class="shell">
+    <div class="sidebar-scrim" id="sidebar-scrim"></div>
+    <aside class="sidebar" id="sidebar" aria-label="Wiki 目录">
+      <nav id="wiki-nav">
+        <p class="nav-label">开始使用</p>
+        <a class="nav-link is-active" href="#quick-start" data-page="quick-start">快速开始</a>
+        <a class="nav-link" href="#install" data-page="install">安装与兼容</a>
+        <a class="nav-link" href="#first-attempt" data-page="first-attempt">跑通第一次强化</a>
+        <p class="nav-label">配置手册</p>
+        <a class="nav-link" href="#config" data-page="config">主配置 config.yml</a>
+        <a class="nav-link" href="#materials" data-page="materials">材料 materials.yml</a>
+        <a class="nav-link" href="#recipes" data-page="recipes">强化方案 recipes</a>
+        <a class="nav-link" href="#advancements" data-page="advancements">进阶方案 advancements</a>
+        <a class="nav-link" href="#gui" data-page="gui">界面 gui</a>
+        <p class="nav-label">参考</p>
+        <a class="nav-link" href="#mechanics" data-page="mechanics">运行机制与安全</a>
+        <a class="nav-link" href="#commands" data-page="commands">命令与权限</a>
+        <a class="nav-link" href="#troubleshooting" data-page="troubleshooting">常见问题</a>
+        <a class="nav-link" href="#api" data-page="api">开发者事件 API</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span>构建产物</span>
+        <code>target/FlStrengthen-1.0.0.jar</code>
+      </div>
+    </aside>
+    <main class="content" id="article-host">
+      <nav class="doc-parent-nav" aria-label="上级目录">
+        <a href="../../index.html">Minecraft Wiki 大全</a>
+        <span>/</span>
+        <a href="../index.html">插件文档</a>
+        <span>/</span>
+        <strong>FlStrengthen</strong>
+      </nav>
+      <div class="content-grid">
+        <div id="pages">
+          <section class="wiki-page" id="quick-start" data-title="快速开始" data-group="开始使用">
+            <header class="page-head">
+              <p class="eyebrow">开始使用</p>
+              <h1>先把一次强化跑起来</h1>
+              <p class="lead">FlStrengthen 是一个配置驱动的装备强化插件。玩家把符合条件的装备放进强化界面，放入材料，点击按钮，插件根据你写的概率决定成功、失败、降级或损坏。</p>
+            </header>
+
+            <div class="callout callout-key">
+              <strong>一句话理解</strong>
+              <p>装备靠“显示名 + 可选 Lore”认领方案，材料靠“显示名 + 可选 Lore”认领身份。配置文件就是这张对照表。</p>
+            </div>
+
+            <h2 id="quick-flow">玩家实际会经历什么</h2>
+            <ol class="flow-list">
+              <li><span>1</span><div><strong>手持装备</strong><p>主手只能拿 1 件，并且名字要命中某个强化方案。</p></div></li>
+              <li><span>2</span><div><strong>输入命令</strong><p>执行 <code>/fls open</code>，装备会暂时放进强化界面。</p></div></li>
+              <li><span>3</span><div><strong>放入材料</strong><p>必需材料、保护材料、概率加成材料分别放进对应槽位。</p></div></li>
+              <li><span>4</span><div><strong>点击强化</strong><p>插件检查金币与材料，然后抽随机数并结算结果。</p></div></li>
+            </ol>
+
+            <h2 id="quick-test">5 分钟测试路线</h2>
+            <p>服务器刚装好插件时，先别急着改配置。按下面顺序确认整条链路是通的。</p>
+            <div class="code-block">
+              <div class="code-head"><span>游戏内依次执行</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls equipment default 0
+/fls material strength-stone 64
+/fls material fine-stone 64</code></pre>
+            </div>
+            <p>拿到“测试武器”和两种测试材料后，手持武器执行：</p>
+            <div class="code-block">
+              <div class="code-head"><span>打开界面</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls open</code></pre>
+            </div>
+
+            <div class="callout callout-warn">
+              <strong>默认会检查 Vault 经济</strong>
+              <p><code>config.yml</code> 默认是 <code>economy.enabled: true</code>。没有 Vault 和经济插件时，把这里改成 <code>false</code>，再执行 <code>/fls reload</code>。</p>
+            </div>
+
+            <h2 id="quick-result">点下去以后应该看到什么</h2>
+            <div class="before-after">
+              <div><span>强化前</span><p>武器 Lore 出现“强化强度”空进度条，当前等级视为 0。</p></div>
+              <div><span>强化到 1 级后</span><p>进度条点亮 2 格，并出现“攻击力 +1、生命值 +2”等方案属性文本。</p></div>
+            </div>
+            <p>默认 1 级成功率是 100%，所以第一次测试只要材料、金币和权限都满足，就一定会成功。</p>
+          </section>
+
+          <section class="wiki-page" id="advancements" data-title="进阶方案 advancements" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>进阶方案 advancements</h1>
+              <p class="lead">强化是在原装备上升级；进阶则是达到条件后消耗旧装备，发放新装备、奖励和命令。一个 YAML 文件里可以放多个进阶方案。</p>
+            </header>
+
+            <h2 id="advance-flow">进阶和强化有什么区别</h2>
+            <div class="compare-grid">
+              <div>
+                <h3>普通强化</h3>
+                <p>装备留在界面里，Lore 等级提高，失败可能保留、降级或损坏。</p>
+              </div>
+              <div>
+                <h3>装备进阶</h3>
+                <p>要求某个强化方案达到指定强度。成功后旧装备被消耗，奖励直接进背包。</p>
+              </div>
+            </div>
+
+            <h2 id="advance-example">完整进阶示例</h2>
+            <div class="code-block">
+              <div class="code-head"><span>advancements/default.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>advancements:
+  default-awakening:
+    equipment:
+      display-name: '&amp;b测试武器%p%'
+      material: '*'
+      lore-contains: []
+    strength-recipe: default
+    required-level: 3
+    success-chance: 50
+    chance-per-extra-level: 5
+    fee: 10000
+    break-on-failure: false
+    materials:
+      strength-stone: 5
+      fine-stone: 5
+    chance-booster:
+      material: chance-booster
+      max-items: 64
+    break-protection-material: break-protector
+    rewards:
+      items:
+        - material: DIAMOND_SWORD
+          amount: 1
+          name: '&amp;d觉醒·测试武器'
+          lore:
+            - '&amp;7由 FlStrengthen 进阶系统生成。'
+          glow: true
+      commands:
+        - '[console] say %player% 完成了一次装备进阶'
+    broadcast: '&amp;d{player} &amp;7成功进阶了 &amp;f{equipment_name}&amp;7！'</code></pre>
+            </div>
+
+            <h2 id="advance-id">方案 ID 和装备匹配</h2>
+            <p>与强化方案不同，进阶 ID 写在文件内容里。<code>default-awakening</code> 才是方案 ID，文件名只用于组织配置。默认示例要求装备同时满足：</p>
+            <ul class="check-list">
+              <li>显示名匹配 <code>&amp;b测试武器%p%</code>。</li>
+              <li>能匹配 <code>strength-recipe: default</code> 的强化方案。</li>
+              <li>当前强化等级至少为 <code>required-level: 3</code>。</li>
+            </ul>
+            <p>进阶自己也会检查 <code>equipment</code>，并要求关联的强化方案同样认这件装备。这样能避免拿一件只是名字相似、实际没有强化等级的物品来进阶。</p>
+
+            <h2 id="advance-chance">成功率怎么算</h2>
+            <div class="formula-box">
+              <p>最终基础概率 = <code>success-chance</code> + (<code>当前等级 - required-level</code>) × <code>chance-per-extra-level</code></p>
+              <p>结果最低 0，最高 100。放入概率材料后再往上加，同样最高 100。</p>
+            </div>
+            <p>默认方案 3 级时是 50%；4 级是 55%；5 级是 60%。<code>required-level</code> 以下根本不能尝试，不会用负数扣概率。</p>
+
+            <h2 id="advance-fields">字段速查</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>解释</th></tr></thead>
+                <tbody>
+                  <tr><td><code>equipment</code></td><td>进阶入口的物品匹配条件，字段与强化方案相同。</td></tr>
+                  <tr><td><code>strength-recipe</code></td><td>用哪个强化方案读取当前等级。必须填已加载的方案 ID。</td></tr>
+                  <tr><td><code>required-level</code></td><td>最低强化等级，低于该值直接提示强度不足。</td></tr>
+                  <tr><td><code>success-chance</code></td><td>刚好达到最低等级时的基础成功率。</td></tr>
+                  <tr><td><code>chance-per-extra-level</code></td><td>每高出最低等级一级，再增加多少成功率。</td></tr>
+                  <tr><td><code>fee</code></td><td>进阶费用，经济开启时扣除。</td></tr>
+                  <tr><td><code>break-on-failure</code></td><td>失败时是否可能损坏旧装备。进阶没有降级逻辑。</td></tr>
+                  <tr><td><code>materials</code></td><td>进阶必需材料 ID 和数量。</td></tr>
+                  <tr><td><code>chance-booster</code></td><td>概率材料定义和单次最多消耗数量。</td></tr>
+                  <tr><td><code>break-protection-material</code></td><td>损坏保护材料 ID。只有失败且开启损坏时才参与。</td></tr>
+                  <tr><td><code>rewards</code></td><td>成功后的物品和命令。</td></tr>
+                  <tr><td><code>broadcast</code></td><td>成功全服消息。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="advance-rewards">奖励物品怎么写</h2>
+            <div class="code-block">
+              <div class="code-head"><span>rewards.items</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>rewards:
+  items:
+    - material: DIAMOND_SWORD
+      data: 0
+      amount: 1
+      name: '&amp;d觉醒武器'
+      lore:
+        - '&amp;7由进阶系统生成'
+      glow: true</code></pre>
+            </div>
+            <p><code>material</code> 写 Bukkit 材质名。<code>data</code> 用于旧版物品数据值；<code>amount</code> 是数量；<code>glow</code> 只添加隐藏附魔光效。背包放不下时，奖励会掉在玩家脚下，不会消失。</p>
+            <p>奖励物品的 <code>name</code> 和 <code>lore</code> 不支持运行时占位符。需要在名称里带玩家名等动态内容时，用奖励命令交给其他插件生成物品，或修改插件代码扩展。</p>
+
+            <h2 id="advance-success">成功后发生什么</h2>
+            <ol class="steps">
+              <li><strong>消耗旧装备</strong><p>界面装备槽里的原装备被移除。</p></li>
+              <li><strong>发放奖励</strong><p>按 <code>rewards.items</code> 的顺序给物品，放不下就掉落。</p></li>
+              <li><strong>执行命令</strong><p>按 <code>rewards.commands</code> 执行，支持 <code>[console]</code>、<code>[player]</code>。</p></li>
+              <li><strong>广播与关界面</strong><p>发送 <code>broadcast</code>，随后关闭进阶界面。</p></li>
+            </ol>
+            <p>奖励命令也支持 <code>%player%</code>、<code>%level%</code>、<code>%equipment_name%</code>。<code>%level%</code> 是进阶时的原装备强度。</p>
+
+            <h2 id="advance-fail">失败时发生什么</h2>
+            <p><code>break-on-failure: false</code> 时，旧装备保留，材料和金币正常消耗。<code>true</code> 时会先检查损坏保护；保护失败则装备消失。进阶没有“失败降级到某个强度”的配置。</p>
+          </section>
+
+          <section class="wiki-page" id="gui" data-title="界面 gui" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>界面 gui</h1>
+              <p class="lead">强化和进阶各有一个界面布局文件。槽位数字与 Bukkit 背包一致，从 0 开始：第一行第一格是 0，第一行第九格是 8，第二行第一格是 9。</p>
+            </header>
+
+            <h2 id="gui-files">两个文件，同一套结构</h2>
+            <div class="file-tree">
+              <p><span class="folder">plugins/FlStrengthen/gui/</span></p>
+              <p>├─ <span class="file">strengthen.yml</span><small>/fls open</small></p>
+              <p>└─ <span class="file">advance.yml</span><small>/fls advance</small></p>
+            </div>
+            <p>文件名由 <code>config.yml</code> 里的 <code>gui.strengthen-layout</code> 和 <code>gui.advance-layout</code> 决定。想换界面风格时，可以复制一份再切文件名。</p>
+
+            <h2 id="gui-map">默认 54 格界面地图</h2>
+            <div class="slot-map-wrap">
+              <div class="slot-map" id="slot-map" data-size="54" aria-label="默认强化界面槽位图"></div>
+              <div class="slot-legend">
+                <span><i class="legend-equipment"></i>装备</span>
+                <span><i class="legend-material"></i>必需材料</span>
+                <span><i class="legend-protection"></i>保护材料</span>
+                <span><i class="legend-boost"></i>概率材料</span>
+                <span><i class="legend-button"></i>执行按钮</span>
+                <span><i class="legend-message"></i>信息物品</span>
+              </div>
+            </div>
+            <p>图上数字就是配置槽位。默认设备在 13，材料在 19 到 25，保护在 29 和 30，概率材料在 32 和 33，按钮在 40，信息纸张在 4。</p>
+
+            <h2 id="gui-slots">槽位字段</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>默认</th><th>作用</th></tr></thead>
+                <tbody>
+                  <tr><td><code>title</code></td><td>界面标题</td><td>支持 <code>&amp;</code> 颜色代码。</td></tr>
+                  <tr><td><code>size</code></td><td><code>54</code></td><td>界面格子数。插件限定在 9 到 54，并向上补齐为整行。</td></tr>
+                  <tr><td><code>equipment-slots</code></td><td><code>[13]</code></td><td>装备展示位。当前实现只使用列表第一项放实际装备。</td></tr>
+                  <tr><td><code>material-slots</code></td><td><code>[19...25]</code></td><td>必需材料可以放入的范围。</td></tr>
+                  <tr><td><code>protection-slots</code></td><td><code>[29, 30]</code></td><td>损坏保护和降级保护共用这些格子。</td></tr>
+                  <tr><td><code>boost-slots</code></td><td><code>[32, 33]</code></td><td>概率加成材料槽。</td></tr>
+                  <tr><td><code>button-slot</code></td><td><code>40</code></td><td>点击后执行强化或进阶的格子。</td></tr>
+                  <tr><td><code>message-slots</code></td><td><code>[4]</code></td><td>动态信息物品显示的格子，可以配多个。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="gui-items">装饰、按钮和信息物品</h2>
+            <div class="code-block">
+              <div class="code-head"><span>strengthen.yml 片段</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>button-item:
+  material: ANVIL
+  data: 0
+  name: '&amp;c&amp;l点击强化'
+  lore:
+    - '&amp;7当前等级: &amp;f%level%'
+    - '&amp;7成功率: &amp;e%chance%%'
+    - '&amp;7费用: &amp;6%money%'
+  glow: true
+
+message-item:
+  material: PAPER
+  name: '&amp;e强化信息'
+  lore:
+    - '&amp;7装备: &amp;f%equipment_name%'
+    - '&amp;7所需材料: &amp;f%requirements%'</code></pre>
+            </div>
+            <p><code>filler-item</code> 会填满所有没被其他功能占用的格子。它只是装饰，关闭界面时不会返还。<code>button-item</code> 放在按钮槽，<code>message-item</code> 会复制到每个信息槽。</p>
+            <p>三类物品都支持 <code>material</code>、<code>data</code>、<code>amount</code>、<code>name</code>、<code>lore</code>、<code>glow</code>。在 1.12 需要物品数据值时可写 <code>data: 15</code>；材质也可以使用 <code>'LEGACY:160'</code>。</p>
+
+            <h2 id="gui-placeholders">按钮和信息物品可用的占位符</h2>
+            <div class="placeholder-grid">
+              <p><code>%equipment_name%</code><span>装备显示名，去掉颜色</span></p>
+              <p><code>%level%</code><span>当前强化等级</span></p>
+              <p><code>%next_level%</code><span>下一等级</span></p>
+              <p><code>%chance%</code><span>计算加成后的当前成功率</span></p>
+              <p><code>%money%</code><span>配置中的费用</span></p>
+              <p><code>%requirements%</code><span>材料名称和数量</span></p>
+              <p><code>%break%</code><span>失败是否可能损坏，显示“是”或“否”</span></p>
+              <p><code>%downgrade%</code><span>失败降低几级</span></p>
+              <p><code>%required_level%</code><span>进阶最低强度</span></p>
+            </div>
+            <p>百分比符号本身要写两个：<code>%chance%%</code> 会显示成“75%”。前面的 <code>%chance%</code> 是占位符，最后一个是普通百分号。</p>
+
+            <h2 id="gui-safety">界面操作规则</h2>
+            <ul class="check-list">
+              <li>主装备槽锁定，玩家不能直接拿走或换入另一件装备。</li>
+              <li>界面内所有拖拽都会被取消，防止把物品拖到奇怪的位置。</li>
+              <li>材料槽只接受已登记、且分类匹配的物品。</li>
+              <li>在玩家背包按住 Shift 点击材料，会尝试放进第一个合适的空槽。</li>
+              <li>关闭界面时只返还装备、材料、保护和加成槽，按钮和装饰不会被刷出来。</li>
+            </ul>
+            <div class="callout callout-info">
+              <strong>槽位不能重叠</strong>
+              <p>装备、材料、保护、加成、按钮和信息槽尽量各用各的。虽然插件会按固定顺序处理，但重叠配置会让界面行为很难理解，也容易误操作。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="mechanics" data-title="运行机制与安全" data-group="参考" hidden>
+            <header class="page-head">
+              <p class="eyebrow">参考</p>
+              <h1>运行机制与安全</h1>
+              <p class="lead">这一页解释“点一下按钮后到底发生了什么”。理解顺序后，失败保护、材料消耗和概率预览就不会看起来像随机乱扣。</p>
+            </header>
+
+            <h2 id="mechanics-sequence">一次强化的完整顺序</h2>
+            <ol class="number-flow">
+              <li><strong>检查会话和冷却</strong><span>同一玩家只能有一个活动界面，默认 300 毫秒内不能重复执行。</span></li>
+              <li><strong>重新确认装备</strong><span>装备槽必须仍是同一件、数量为 1，并且继续匹配方案。</span></li>
+              <li><strong>只检查，不先扣</strong><span>先确认目标等级、材料和金币足够。任何一项不足都不会进入抽奖。</span></li>
+              <li><strong>计算预览概率</strong><span>基础成功率加概率材料，最终限制在 0 到 100。</span></li>
+              <li><strong>触发尝试事件</strong><span>其他插件可以在这一步取消强化。</span></li>
+              <li><strong>保存快照并扣费</strong><span>保存界面物品快照，再扣金币和必需材料。</span></li>
+              <li><strong>消耗概率材料并判定</strong><span>只消耗补满成功率所需的材料，然后生成 0 到 100 的随机数。</span></li>
+              <li><strong>结算成功或失败</strong><span>更新 Lore；失败时再检查损坏、降级和保护材料。</span></li>
+              <li><strong>触发完成事件</strong><span>把成功、保留、降级、保护或损坏结果交给监听器。</span></li>
+            </ol>
+
+            <h2 id="mechanics-failure">失败结果对照表</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>配置情况</th><th>失败后</th><th>材料与金币</th></tr></thead>
+                <tbody>
+                  <tr><td>不损坏，降级 0 级</td><td>装备和等级都保留</td><td>照常消耗</td></tr>
+                  <tr><td>不损坏，降级 1 到 N 级</td><td>等级降低，最低到 0</td><td>照常消耗；降级保护可介入</td></tr>
+                  <tr><td>允许损坏，保护成功</td><td>装备保留在当前等级</td><td>必需材料、金币、保护材料照常消耗</td></tr>
+                  <tr><td>允许损坏，保护失败</td><td>装备从界面消失</td><td>必需材料、金币、保护材料照常消耗</td></tr>
+                  <tr><td>允许损坏，同时又配置降级</td><td>先判定损坏；没坏再判定降级</td><td>两类保护可能都需要</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>普通失败不是“插件出错”，因此不会回滚。只有处理过程中抛出未预期异常时，插件才恢复界面快照并退回已经扣除的金币。</p>
+
+            <h2 id="mechanics-protection">保护材料怎么生效</h2>
+            <p>进入对应失败分支后，插件会把保护槽里所有匹配该保护 ID 的物品一次性消耗，把每件物品的概率相加，再抽一次。</p>
+            <div class="formula-box">
+              <p>3 件保护石，每件 10% → 总保护率 30%</p>
+              <p>抽中 → 本次损坏或降级被挡住；没抽中 → 正常损坏或降级</p>
+            </div>
+            <p>保护物品无论判定成功还是失败都会消耗。若某个等级同时可能损坏和降级，先处理损坏保护；装备没被损坏，再处理降级保护。</p>
+
+            <h2 id="mechanics-booster">概率材料为什么不会“吃满”</h2>
+            <p>假设基础成功率 90%，每件祝福材料加 5%，槽里放了 10 件。插件只会消耗 2 件把成功率补到 100%，剩下 8 件留在界面里。</p>
+            <div class="before-after">
+              <div><span>基础 90%</span><p>预览显示 90%。</p></div>
+              <div><span>放入 10 件，每件 +5%</span><p>预览显示 100%，但只计算到上限。</p></div>
+              <div><span>点击执行</span><p>消耗 2 件，剩余 8 件关闭界面时退回。</p></div>
+            </div>
+            <p><code>max-items</code> 是单次最多计入多少件。即使槽里放得更多，预览和消耗都只按这个上限计算。</p>
+
+            <h2 id="mechanics-probability">概率边界</h2>
+            <p>所有概率先限制到 0 到 100。判定使用 <code>[0, 100)</code> 的随机数，因此边界行为明确：</p>
+            <ul class="check-list">
+              <li><code>0</code> 永远失败，不会出现极小概率成功。</li>
+              <li><code>100</code> 永远成功，不会因为随机数刚好 100 失败。</li>
+              <li>写小数也可以，例如 <code>12.5</code> 表示 12.5%。</li>
+              <li>写负数按下限 0 处理，写超过 100 按上限 100 处理。</li>
+            </ul>
+
+            <h2 id="mechanics-session">为什么关闭界面能退物品</h2>
+            <p>打开界面时，插件先给这次操作建立独立会话，并记录玩家、装备、布局和界面容器。它只处理自己创建的界面，不会把普通箱子点击误判成强化操作。</p>
+            <p>关闭、插件禁用或默认重载时，插件只返还内容槽位中的物品。装饰玻璃、按钮和信息纸张由插件生成，不在返还范围内，这能挡住通过关闭界面复制按钮物品的问题。</p>
+
+            <h2 id="mechanics-performance">性能与重载</h2>
+            <p>Bukkit 背包操作都在主线程完成。配置解析完成后会整体替换数据引用，避免玩家操作到一半撞上新旧配置混合的状态。默认重载会先关闭活动界面，所以重载期间不会保留旧会话。</p>
+            <p>插件没有为每个玩家启动计时器，也没有后台线程轮询。日常开销主要来自打开界面、更新预览和点击结算，适合普通生存服的材料规模。</p>
+
+            <div class="callout callout-warn">
+              <strong>当前版本不做真实属性修改</strong>
+              <p>原版攻击力、生命值等不会因为 Lore 里的文字自动变化。需要真实数值时，请用成功命令对接属性插件，或让玩法本身以 Lore 为结算依据。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="commands" data-title="命令与权限" data-group="参考" hidden>
+            <header class="page-head">
+              <p class="eyebrow">参考</p>
+              <h1>命令与权限</h1>
+              <p class="lead">主命令是 <code>/flstrengthen</code>，日常可以简写成 <code>/fls</code>。管理命令主要用于生成测试物品、查看版本和重载配置。</p>
+            </header>
+
+            <h2 id="commands-list">全部命令</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>命令</th><th>权限</th><th>用途</th></tr></thead>
+                <tbody>
+                  <tr><td><code>/fls open</code></td><td><code>flstrengthen.use</code></td><td>打开主手装备的强化界面。</td></tr>
+                  <tr><td><code>/fls advance</code></td><td><code>flstrengthen.advance</code></td><td>打开主手装备的进阶界面。</td></tr>
+                  <tr><td><code>/fls material &lt;ID&gt; [数量]</code></td><td><code>flstrengthen.admin</code></td><td>生成测试材料，数量限制 1 到 64。</td></tr>
+                  <tr><td><code>/fls equipment &lt;方案ID&gt; [等级]</code></td><td><code>flstrengthen.admin</code></td><td>生成某个方案的测试装备。</td></tr>
+                  <tr><td><code>/fls reload</code></td><td><code>flstrengthen.admin</code></td><td>关闭活动界面并重新读取全部 YAML。</td></tr>
+                  <tr><td><code>/fls version</code></td><td>无</td><td>查看当前插件版本。</td></tr>
+                  <tr><td><code>/fls help</code></td><td>无</td><td>显示游戏内帮助。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>别名有 <code>/flstrengthen</code>、<code>/fls</code>、<code>/wqh</code>。三个写法执行的是同一套命令。</p>
+
+            <h2 id="commands-examples">常用示例</h2>
+            <div class="code-block">
+              <div class="code-head"><span>给玩家自己生成测试内容</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls equipment default 0
+/fls equipment default 5
+/fls material strength-stone 64
+/fls material chance-booster 16</code></pre>
+            </div>
+            <p><code>/fls equipment default 5</code> 会直接生成 5 级装备，方便测试满级提示和进阶。传入超出方案范围的等级时，插件会夹到 0 到最高等级之间。</p>
+            <p><code>/fls material</code> 和 <code>/fls equipment</code> 必须由玩家执行，因为生成物会进入玩家背包。控制台可以正常执行 <code>/fls reload</code> 和 <code>/fls version</code>。</p>
+
+            <h2 id="commands-permissions">权限默认值</h2>
+            <div class="permission-list">
+              <p><code>flstrengthen.use</code><span>默认所有玩家拥有，允许打开强化界面。</span></p>
+              <p><code>flstrengthen.advance</code><span>默认所有玩家拥有，允许打开进阶界面。</span></p>
+              <p><code>flstrengthen.admin</code><span>默认仅 OP 拥有，允许生成物品和重载配置。</span></p>
+            </div>
+
+            <h2 id="commands-luckperms">LuckPerms 示例</h2>
+            <div class="code-block">
+              <div class="code-head"><span>控制台或游戏内</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/lp group default permission set flstrengthen.use true
+/lp group default permission set flstrengthen.advance true
+/lp user Steve permission set flstrengthen.admin true</code></pre>
+            </div>
+            <p>如果普通玩家能打开命令却没有匹配方案，先检查装备显示名和 Lore，不要第一时间怀疑权限。权限只决定能不能执行命令，不决定装备是否进入某个方案。</p>
+
+            <h2 id="commands-tab">Tab 补全</h2>
+            <p>插件会根据权限补全子命令，也会为材料命令补全材料 ID、为装备命令补全方案 ID。输入到一半再按 Tab 即可，不需要去翻配置文件找 ID。</p>
+          </section>
+
+          <section class="wiki-page" id="troubleshooting" data-title="常见问题" data-group="参考" hidden>
+            <header class="page-head">
+              <p class="eyebrow">参考</p>
+              <h1>常见问题与排错</h1>
+              <p class="lead">先看控制台的加载数量，再看物品能不能匹配，最后看材料、金币和槽位。大多数问题都在这四步之内。</p>
+            </header>
+
+            <div class="troubleshooting-order">
+              <span>控制台报错</span><i>→</i>
+              <span>方案数量</span><i>→</i>
+              <span>装备匹配</span><i>→</i>
+              <span>材料与经济</span>
+            </div>
+
+            <h2 id="faq-config">配置明明改了，为什么没生效？</h2>
+            <p>改的是 <code>plugins/FlStrengthen/</code> 下的文件，并且执行了 <code>/fls reload</code> 吗？如果改的是源码里的 <code>src/main/resources</code>，那只会在重新构建 JAR 后影响新生成的默认文件；服务器运行时读取的是插件数据目录。</p>
+            <p>插件不会覆盖已经存在的 YAML。想恢复默认配置，应先备份，再移走旧文件后重启，让插件重新生成。</p>
+
+            <h2 id="faq-zero-recipes">提示加载 0 个方案，怎么查？</h2>
+            <ol class="steps">
+              <li><strong>看文件位置</strong><p>强化文件必须在 <code>recipes/</code>，扩展名必须是 <code>.yml</code>。</p></li>
+              <li><strong>看等级是否连续</strong><p><code>max-level: 5</code> 就必须有 1、2、3、4、5，一个都不能少。</p></li>
+              <li><strong>看材料 ID</strong><p>方案里引用的每个材料都必须在 <code>materials.yml</code> 存在。</p></li>
+              <li><strong>看 YAML 缩进</strong><p>层级只能用空格，不要混 Tab。列表项前的 <code>-</code> 要与内容对齐。</p></li>
+            </ol>
+            <p>被跳过的方案会在控制台给出文件名和原因。先搜索 JAR 名或 <code>Skipped invalid</code>。</p>
+
+            <h2 id="faq-no-scheme">装备就是打不开，提示没有匹配方案</h2>
+            <p>按顺序检查三个条件：装备必须有自定义显示名；显示名去掉颜色后要完整匹配模板；如果写了 <code>lore-contains</code>，每一条 Lore 都必须存在。只满足其中一个不够。</p>
+            <div class="callout callout-info">
+              <strong>先做一个不会认错的测试物品</strong>
+              <p>执行 <code>/fls equipment default 0</code>。这个命令生成的装备一定能匹配默认方案。如果它能打开，就说明插件正常，问题在你自己物品的名字或 Lore。</p>
+            </div>
+
+            <h2 id="faq-material">材料放不进槽位</h2>
+            <ul class="check-list">
+              <li>材料是否有自定义显示名，并且与 <code>display-name</code> 匹配。</li>
+              <li><code>category</code> 是否与槽位类型一致。例如强化石不能放进概率材料槽。</li>
+              <li>物品是否先命中了更早的另一条材料定义。</li>
+              <li>保护材料槽和加成材料槽在界面配置中是否真的存在。</li>
+              <li>若使用 Shift 点击，目标分类的槽位是否已经放满。</li>
+            </ul>
+
+            <h2 id="faq-money">一直提示经济系统不可用</h2>
+            <p><code>economy.enabled: true</code> 时，只要本次费用大于 0，插件就要求 Vault 和经济插件都正常。安装 Vault 与经济插件，或关闭经济开关。</p>
+            <p>如果已经关闭经济却仍看到收费，先区分“界面预览写着费用”和“余额真的少了”。关闭经济后实际扣款为 0。</p>
+
+            <h2 id="faq-chance">按钮上的成功率和配置不一样</h2>
+            <p>按钮显示的是“基础成功率 + 当前概率材料加成”，不是只读 <code>success-chance</code>。把加成槽里的物品拿出来，再观察数字是否回到基础值。</p>
+            <p>如果基础值是 100，放不加概率材料也是 100。如果基础值是 0，必须靠材料或其他插件事件才有可能成功；插件本身不会偷偷给保底。</p>
+
+            <h2 id="faq-protection">保护石怎么全没了？</h2>
+            <p>保护材料不是按“生效几件扣几件”，而是进入对应失败分支后，把槽内所有匹配物品一次性消耗，再把概率相加做一次判定。数量越多，总保护率越高，但无论成功失败都会全部消耗。</p>
+
+            <h2 id="faq-level-reset">更新配置后，旧装备等级变成 0 了</h2>
+            <p>插件通过当前 <code>level-display</code> 生成的 Lore 文本来识别等级。如果改了模板、进度条长度或填充字符，旧装备上那一行就匹配不上新模板，于是被当成 0 级。</p>
+            <p>已经上线的方案尽量冻结等级显示格式。确实要改时，先准备旧装备迁移方案，例如用命令批量替换 Lore。</p>
+
+            <h2 id="faq-attributes">Lore 写着攻击力 +15，为什么伤害没变？</h2>
+            <p><code>attributes</code> 是纯文本，不是原版 <code>AttributeModifier</code>。FlStrengthen 负责写 Lore 和触发命令，不负责修改剑的基础伤害、额外生命或暴击系统。</p>
+            <p>要产生真实效果，可以在 <code>success-commands</code> 里调用属性插件、RPG 插件或自定义脚本。如果服务端已有按 Lore 计算属性的系统，则继续遵守那套系统的格式要求。</p>
+
+            <h2 id="faq-close">关闭界面后物品去哪了？</h2>
+            <p>装备、必需材料、保护材料和概率材料会尝试放回背包。背包满时物品掉落在玩家脚下。按钮、信息纸张和填充玻璃由插件生成，不会返还。</p>
+            <p>如果重载或禁用插件时界面还开着，插件也会先关闭并返还内容。极端情况下操作背包抛出异常，应查看控制台并停服检查，不要继续让玩家批量点击。</p>
+
+            <h2 id="faq-reload">reload 和重启有什么区别？</h2>
+            <p><code>/fls reload</code> 只重新读取 YAML，不重新加载 Java 类。改配置用它，换 JAR 必须完整重启。重载失败时，先解决控制台指出的 YAML 或引用错误，再重复执行。</p>
+
+            <h2 id="faq-paper-warning">Paper 1.20 的 legacy plugin 警告要处理吗？</h2>
+            <p>通常不用。插件为了兼容 1.12 没有在 <code>plugin.yml</code> 写 <code>api-version</code>，所以新版 Paper 会提醒一次。只要控制台随后显示 FlStrengthen 已启用并加载方案，就不影响运行。</p>
+
+            <h2 id="faq-not-enable">插件完全没启用</h2>
+            <ol class="steps">
+              <li><strong>确认文件</strong><p>JAR 是否放在 <code>plugins/</code>，文件名是否完整，文件大小是否正常。</p></li>
+              <li><strong>确认 Java</strong><p>插件产物是 Java 8 字节码。服务端的 Java 版本应满足服务端本身要求。</p></li>
+              <li><strong>搜索首个报错</strong><p>不要只看最后一行。找到第一次出现 <code>FlStrengthen</code> 的异常和它下面的 <code>Caused by</code>。</p></li>
+              <li><strong>排除配置损坏</strong><p>临时移走插件配置目录并重启，让插件重新生成默认文件，再判断是不是旧 YAML 导致。</p></li>
+            </ol>
+
+            <h2 id="faq-broadcast">广播或命令里变量没有替换</h2>
+            <p>命令使用百分号：<code>%player%</code>、<code>%level%</code>、<code>%equipment_name%</code>。广播使用大括号：<code>{player}</code>、<code>{level}</code>、<code>{equipment_name}</code>。两套语法不要混用。</p>
+            <p><code>[op]</code> 前缀被安全策略拦截，会在控制台打印警告并且不执行。需要以玩家身份运行时写 <code>[player]</code>，其余情况写 <code>[console]</code>。</p>
+          </section>
+
+          <section class="wiki-page" id="api" data-title="开发者事件 API" data-group="参考" hidden>
+            <header class="page-head">
+              <p class="eyebrow">参考</p>
+              <h1>开发者事件 API</h1>
+              <p class="lead">插件提供四个同步 Bukkit 事件：强化尝试、强化完成、进阶尝试、进阶完成。适合接入活动倍率、次数限制、统计、日志和成就系统。</p>
+            </header>
+
+            <h2 id="api-events">事件列表</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>事件</th><th>可取消</th><th>能拿到什么</th></tr></thead>
+                <tbody>
+                  <tr><td><code>FlStrengthenAttemptEvent</code></td><td>是</td><td>玩家、方案、当前等级、下一等级、预览成功率和费用。</td></tr>
+                  <tr><td><code>FlStrengthenCompleteEvent</code></td><td>否</td><td>玩家、方案和最终结果。</td></tr>
+                  <tr><td><code>FlAdvanceAttemptEvent</code></td><td>是</td><td>玩家、进阶方案、当前强度和预览成功率。</td></tr>
+                  <tr><td><code>FlAdvanceCompleteEvent</code></td><td>否</td><td>玩家、进阶方案和最终结果。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>尝试事件在扣金币和材料之前触发，所以在这里取消不会损失物品。完成事件在结算结束后触发，不能用它撤销已经发生的失败。</p>
+            <p>上面的结果对象包含 8 种状态，但完成事件只在真正进入结算后发出。被取消、条件无效或处理异常时，流程会直接返回，因此完成事件监听器通常只会看到 <code>SUCCESS</code> 或各种 <code>FAIL_*</code> 结果。</p>
+
+            <h2 id="api-result">完成结果的几种状态</h2>
+            <div class="result-grid">
+              <p><code>SUCCESS</code><span>成功</span></p>
+              <p><code>FAIL_KEPT</code><span>失败但装备保留</span></p>
+              <p><code>FAIL_DOWNGRADED</code><span>失败并降级</span></p>
+              <p><code>FAIL_PROTECTED</code><span>保护材料挡住失败</span></p>
+              <p><code>FAIL_DESTROYED</code><span>失败并损坏</span></p>
+              <p><code>CANCELLED</code><span>被事件取消</span></p>
+              <p><code>INVALID</code><span>条件不足或装备变化</span></p>
+              <p><code>ERROR</code><span>异常并执行回滚</span></p>
+            </div>
+            <p>用 <code>result.isSuccess()</code> 快速判断成功，或读取 <code>getOutcome()</code> 做更细的统计。<code>getPreviousLevel()</code> 和 <code>getResultLevel()</code> 分别表示操作前后等级。</p>
+
+            <h2 id="api-example">监听示例</h2>
+            <p>下面这个监听器会取消“预览成功率低于 10%”的尝试，并在成功后打印一条日志：</p>
+            <div class="code-block">
+              <div class="code-head"><span>StrengthListener.java</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>package example;
+
+import cn.fl.strengthen.api.FlAttemptResult;
+import cn.fl.strengthen.api.FlStrengthenAttemptEvent;
+import cn.fl.strengthen.api.FlStrengthenCompleteEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+
+public final class StrengthListener implements Listener {
+    @EventHandler(priority = EventPriority.HIGHEST,
+            ignoreCancelled = true)
+    public void onAttempt(FlStrengthenAttemptEvent event) {
+        if (event.getChance() &lt; 10D) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onComplete(FlStrengthenCompleteEvent event) {
+        if (event.getResult().getOutcome()
+                == FlAttemptResult.Outcome.SUCCESS) {
+            event.getPlayer().sendMessage("强化成功");
+        }
+    }
+}</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-head"><span>在主类 onEnable() 注册</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>getServer().getPluginManager().registerEvents(
+        new StrengthListener(), this);</code></pre>
+            </div>
+
+            <h2 id="api-notes">接入时注意</h2>
+            <ul class="check-list">
+              <li>四个事件都是同步事件，需要操作 Bukkit 物品或玩家状态时保持主线程规则。</li>
+              <li>尝试事件看到的成功率包含当前界面里的概率材料，但此时还没有扣材料。</li>
+              <li>完成事件的监听器抛异常会被插件捕获并记录，不会让整个服务器调度中断。</li>
+              <li>API 类和模型类都在 FlStrengthen JAR 中。开发插件时按普通软依赖方式编译，并在服务器上安装 FlStrengthen。</li>
+            </ul>
+            <div class="callout callout-info">
+              <strong>事件适合扩展，不适合偷偷改数值</strong>
+              <p>尝试事件没有修改成功率的 setter，只提供预览值和取消能力。需要动态倍率时，建议在事件中判断条件，再通过你自己的配置或命令系统实现；不要假设修改展示值会改变最终抽奖。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="materials" data-title="材料 materials.yml" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>材料 materials.yml</h1>
+              <p class="lead">材料文件相当于“身份证登记处”。强化方案只写材料 ID，例如 <code>strength-stone</code>；到底长什么样的物品才算这个 ID，由这里决定。</p>
+            </header>
+
+            <h2 id="materials-example">一份能直接看懂的配置</h2>
+            <div class="code-block">
+              <div class="code-head"><span>materials.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>materials:
+  strength-stone:
+    category: MATERIAL
+    display-name: '&amp;b测试强化石'
+    material: '*'
+    lore-contains: []
+
+  chance-booster:
+    category: BOOST
+    display-name: '&amp;d测试祝福材料'
+    material: '*'
+    lore-contains: []
+    bonus-key: '强化成功几率'
+    default-bonus: 5</code></pre>
+            </div>
+            <p>第一条告诉插件：显示名是“测试强化石”的物品，ID 就是 <code>strength-stone</code>，可以放进材料槽。第二条除了身份，还告诉插件：每件最多增加 5% 成功率。</p>
+
+            <h2 id="materials-fields">每个字段到底管什么</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>必填</th><th>解释</th></tr></thead>
+                <tbody>
+                  <tr><td><code>category</code></td><td>建议</td><td>能放进哪类槽位：<code>MATERIAL</code>、<code>PROTECTION</code>、<code>BOOST</code>、<code>ANY</code>。</td></tr>
+                  <tr><td><code>display-name</code></td><td>是</td><td>物品显示名模板。支持 <code>%p%</code> 通配，比较时忽略颜色。</td></tr>
+                  <tr><td><code>material</code></td><td>否</td><td>Bukkit 材质名；<code>'*'</code> 表示不限制物品类型。默认就是 <code>'*'</code>。</td></tr>
+                  <tr><td><code>lore-contains</code></td><td>否</td><td>物品必须同时包含这些 Lore 文本。适合防止普通物品只改个名字就冒充材料。</td></tr>
+                  <tr><td><code>bonus-key</code></td><td>否</td><td>从 Lore 中找到这个关键词，并读取关键词后面的第一个数字作为概率。</td></tr>
+                  <tr><td><code>default-bonus</code></td><td>否</td><td>没找到关键词数值时，每件物品使用多少概率。默认 0。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="materials-category">四种分类怎么选</h2>
+            <div class="category-list">
+              <p><code>MATERIAL</code><span>必需材料。例如强化石、精炼石。</span></p>
+              <p><code>PROTECTION</code><span>保护材料。根据方案决定保护损坏或保护降级。</span></p>
+              <p><code>BOOST</code><span>概率材料。放得越多成功率越高，达到目标后只会消耗需要的数量。</span></p>
+              <p><code>ANY</code><span>三类槽位都能放。方便，但更容易发生定义冲突。</span></p>
+            </div>
+
+            <h2 id="materials-name">显示名匹配：%p% 是通配符</h2>
+            <p>插件匹配的是“去掉颜色代码后的完整显示名”，并且不区分英文大小写。<code>%p%</code> 可以代表任意文本，也可以代表空文本。</p>
+            <div class="match-examples">
+              <div><code>'&amp;b强化石%p%'</code><span>匹配“强化石”“强化石 +1”“强化石·高级”</span></div>
+              <div><code>'&amp;c[%p%]保护石'</code><span>匹配“[初级]保护石”“[副本]保护石”</span></div>
+              <div><code>'强化石'</code><span>只匹配显示名完全等于“强化石”的物品</span></div>
+            </div>
+            <div class="callout callout-warn">
+              <strong>没有显示名的物品不会命中</strong>
+              <p>材料匹配要求物品已有自定义显示名。即使材质和 Lore 都对，没有显示名也不能放入任何特殊槽位。</p>
+            </div>
+
+            <h2 id="materials-lore">用 Lore 增加可信度</h2>
+            <p>只靠名字很容易被同名物品冒充。建议给正式材料加一行固定 Lore，并同时写进配置：</p>
+            <div class="code-block">
+              <div class="code-head"><span>材料定义</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>  strength-stone:
+    category: MATERIAL
+    display-name: '&amp;b服务器强化石'
+    material: '*'
+    lore-contains:
+      - '&amp;8FlStrengthen 材料'
+    bonus-key: '强化成功几率'
+    default-bonus: 5</code></pre>
+            </div>
+            <p><code>lore-contains</code> 是“全部包含”而不是“任意一条包含”。写了三行，物品就必须同时拥有这三段文字。颜色代码会被忽略，文字内容必须出现。</p>
+
+            <h2 id="materials-bonus">概率数字从哪里读</h2>
+            <p>假设物品 Lore 写着 <code>强化成功几率: 8</code>，配置关键词是 <code>强化成功几率</code>，那么每件算 8%。百分号可写可不写，插件读取的是关键词后面的第一个数字。</p>
+            <div class="before-after">
+              <div><span>找到关键词和数字</span><p>该件物品的概率等于数字，例如 <code>+8%</code>。</p></div>
+              <div><span>只有关键词，没写数字</span><p>使用 <code>default-bonus</code>。</p></div>
+              <div><span>连关键词都没有</span><p>同样使用 <code>default-bonus</code>。</p></div>
+            </div>
+
+            <h2 id="materials-priority">同名冲突时按文件顺序取第一个</h2>
+            <p>插件会按 <code>materials.yml</code> 中从上到下的顺序查找。一个物品同时符合多个定义时，只认第一个。请让定义尽量具体，尤其是不要先放一个过于宽松的 <code>%p%</code> 定义，否则后面的定义可能永远匹配不到。</p>
+
+            <h2 id="materials-material">material 怎么写才不跨版本翻车</h2>
+            <p>材料识别使用的是当前服务端返回的 Bukkit 材质名，并且要求完全一致。跨版本最稳的做法是：材料正式物品用专属显示名和 Lore，识别时写 <code>material: '*'</code>。</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>写法</th><th>可用于</th><th>说明</th></tr></thead>
+                <tbody>
+                  <tr><td><code>material: '*'</code></td><td>所有版本</td><td>不检查材质，只检查显示名和 Lore，推荐用于自定义材料。</td></tr>
+                  <tr><td><code>material: DIAMOND_SWORD</code></td><td>1.12 - 1.20</td><td>基础材质名在各版本中比较稳定。</td></tr>
+                  <tr><td><code>material: STAINED_GLASS_PANE</code></td><td>主要在 1.12</td><td>1.13 起名称发生变化，例如白色玻璃板是 <code>WHITE_STAINED_GLASS_PANE</code>。</td></tr>
+                  <tr><td><code>LEGACY:160</code></td><td>仅创建物品处</td><td>可用于 GUI 和进阶奖励的材质字段，用于按旧数字 ID 创建物品；不要把它当成材料匹配名。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout callout-info">
+              <strong>一条规则省掉大多数兼容问题</strong>
+              <p>材料永远写 <code>material: '*'</code>，再用固定显示名和专属 Lore 判断。这样同一个配置文件从 1.12 换到 1.20，不需要重新查方块枚举。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="recipes" data-title="强化方案 recipes" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>强化方案 recipes</h1>
+              <p class="lead"><code>recipes/</code> 下的每个 YAML 就是一个完整的强化方案。文件名去掉 <code>.yml</code> 后就是方案 ID，例如 <code>weapon.yml</code> 的方案 ID 是 <code>weapon</code>。</p>
+            </header>
+
+            <h2 id="recipe-path">文件放在哪里</h2>
+            <div class="file-tree">
+              <p><span class="folder">plugins/FlStrengthen/recipes/</span></p>
+              <p>├─ <span class="file">default.yml</span><small>方案 ID：default</small></p>
+              <p>├─ <span class="file">weapon.yml</span><small>方案 ID：weapon</small></p>
+              <p>└─ <span class="file">armor.yml</span><small>方案 ID：armor</small></p>
+            </div>
+            <p>文件会按名称排序加载。多件装备同时符合多个方案时，插件取第一个匹配项，所以应尽量用专属 Lore 或更明确的显示名区分方案。</p>
+
+            <h2 id="recipe-example">一份两分钟就能看懂的小方案</h2>
+            <div class="code-block">
+              <div class="code-head"><span>recipes/weapon.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>equipment:
+  display-name: '&amp;b精炼剑%p%'
+  material: DIAMOND_SWORD
+  lore-contains:
+    - '&amp;8FlStrengthen 装备'
+
+marker: '&amp;e----[&amp;c强化属性&amp;e]-----'
+max-level: 2
+
+level-display:
+  mode: NUMBER
+  template: '&amp;b强化等级: &amp;e{level} / 2'
+
+protection:
+  break-material: break-protector
+  downgrade-material: downgrade-protector
+
+chance-booster:
+  material: chance-booster
+  max-items: 64
+
+levels:
+  '1':
+    fee: 100
+    success-chance: 100
+    break-on-failure: false
+    downgrade-levels: 0
+    materials:
+      strength-stone: 1
+    attributes:
+      - '&amp;a攻击力: &amp;c+1'
+    success-commands: []
+    broadcast: ''
+  '2':
+    fee: 200
+    success-chance: 60
+    break-on-failure: true
+    downgrade-levels: 1
+    materials:
+      strength-stone: 2
+      fine-stone: 1
+    attributes:
+      - '&amp;a攻击力: &amp;c+3'
+      - '&amp;a生命值: &amp;c+5'
+    success-commands:
+      - '[console] say %player% 的武器强化到了 %level% 级'
+    broadcast: '&amp;e{player} &amp;7把装备强化到了 &amp;e{level} 级！'</code></pre>
+            </div>
+
+            <h2 id="recipe-equipment">equipment：什么装备能进这个方案</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>示例</th><th>解释</th></tr></thead>
+                <tbody>
+                  <tr><td><code>display-name</code></td><td><code>'&amp;b精炼剑%p%'</code></td><td>必须匹配的显示名模板。<code>%p%</code> 可以代表任意后缀，颜色不参与比较。</td></tr>
+                  <tr><td><code>material</code></td><td><code>DIAMOND_SWORD</code></td><td>限制 Bukkit 材质；写 <code>'*'</code> 表示不限制。</td></tr>
+                  <tr><td><code>lore-contains</code></td><td><code>['&amp;8FlStrengthen 装备']</code></td><td>装备必须拥有的 Lore。强烈建议写一条专属标识，防止同名普通剑混进强化。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout callout-key">
+              <strong>识别装备时，显示名是硬条件</strong>
+              <p>装备也必须拥有自定义显示名。只改 Lore、没改名字的普通钻石剑不会进入方案。</p>
+            </div>
+
+            <h2 id="recipe-levels">max-level 与 levels：升级路线</h2>
+            <p><code>max-level: 2</code> 表示最高 2 级。你必须连续写出 <code>'1'</code> 和 <code>'2'</code> 两个等级。少写一级、跳号或写超过上限，整个方案会被跳过并在控制台提示。</p>
+            <p>YAML 里把等级数字加上引号最稳：<code>'1':</code>。没加引号通常也能读，但引号可以明确告诉 YAML：“这是键名，不是普通数字”。</p>
+
+            <h2 id="recipe-level-fields">每个等级里的字段</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>示例</th><th>实际效果</th></tr></thead>
+                <tbody>
+                  <tr><td><code>fee</code></td><td><code>200</code></td><td>从当前等级升到这一级要扣多少金币。经济关闭时不扣。</td></tr>
+                  <tr><td><code>success-chance</code></td><td><code>60</code></td><td>基础成功率，范围 0 到 100。0 必失败，100 必成功。</td></tr>
+                  <tr><td><code>break-on-failure</code></td><td><code>true</code></td><td>失败后是否进入损坏判定。保护材料只在这个开关为 true 时有意义。</td></tr>
+                  <tr><td><code>downgrade-levels</code></td><td><code>1</code></td><td>失败且装备没有损坏时，降低几级；最低降到 0。</td></tr>
+                  <tr><td><code>materials</code></td><td><code>strength-stone: 2</code></td><td>升到这一级必须消耗的材料 ID 和数量。</td></tr>
+                  <tr><td><code>attributes</code></td><td><code>攻击力 +3</code></td><td>成功后写入 Lore 的属性文本。它不会自动修改原版战斗属性。</td></tr>
+                  <tr><td><code>success-commands</code></td><td><code>[console] ...</code></td><td>成功后执行命令。可以对接其他 RPG 或属性插件。</td></tr>
+                  <tr><td><code>broadcast</code></td><td><code>{player} ...</code></td><td>成功后发送全服消息；留空就不广播。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="recipe-display">level-display：等级写在 Lore 里长什么样</h2>
+            <p>插件不靠“第几行数字”猜等级，而是把每个等级都渲染成一行文本，再拿装备 Lore 逐行精确比较。改显示模板后，旧装备如果还写着旧模板，可能被重新视为 0 级。上线后不要随意改这一段的格式。</p>
+            <div class="display-modes">
+              <div>
+                <h3>NUMBER 数字</h3>
+                <pre><code>mode: NUMBER
+template: '&amp;e强化 +{level}'</code></pre>
+                <p>显示“强化 +0”“强化 +1”。数字直观，适合等级很多的方案。</p>
+              </div>
+              <div>
+                <h3>BAR 进度条</h3>
+                <pre><code>mode: BAR
+template: '&amp;b强度 [{bar}]'
+bar-length: 10
+filled: '■'
+empty: '□'</code></pre>
+                <p>默认效果是 10 格进度条。填充格数按当前等级占最高等级的比例计算。</p>
+              </div>
+              <div>
+                <h3>WORDS 文字</h3>
+                <pre><code>mode: WORDS
+template: '&amp;b强化: &amp;e{word}'
+words: ['零', '壹', '贰']</code></pre>
+                <p>按等级从数组取词。数组不够长时，最高等级会重复使用最后一个词，真的需要更多词就补齐。</p>
+              </div>
+            </div>
+            <p>三种模式都支持在同一模板里混用 <code>{level}</code>、<code>{bar}</code> 和 <code>{word}</code>。注意没有 <code>{max}</code> 占位符，最高等级要写成固定文字。</p>
+
+            <h2 id="recipe-marker">marker：属性区域的分隔线</h2>
+            <p>建议保留 <code>marker</code>。第一次成功时，插件会把这行分隔线放进 Lore，再把等级行和完整属性组插到它下面。以后升级时只替换这块由插件管理的内容，不会乱删玩家原有的其他 Lore。</p>
+
+            <h2 id="recipe-protection">protection 与 chance-booster</h2>
+            <div class="code-block">
+              <div class="code-head"><span>引用 materials.yml 里的 ID</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>protection:
+  break-material: break-protector
+  downgrade-material: downgrade-protector
+
+chance-booster:
+  material: chance-booster
+  max-items: 64</code></pre>
+            </div>
+            <p><code>break-material</code> 只在 <code>break-on-failure: true</code> 时参与。降级保护只在确实要降级时参与。概率材料放在加成槽，计算时只消耗达到 100% 所需的件数，并且受 <code>max-items</code> 限制。</p>
+
+            <h2 id="recipe-commands">success-commands 与三类占位符</h2>
+            <p>每条命令可以写 <code>[console]</code> 或 <code>[player]</code>。不写前缀时默认按控制台执行。<code>[op]</code> 会被明确拦截，避免配置被植入后给玩家临时 OP。</p>
+            <div class="plain-example">
+              <code>[console] say %player% 强化到了 %level% 级</code>
+              <code>[player] msg %player% 你的 %equipment_name% 变强了</code>
+            </div>
+            <p>命令支持 <code>%player%</code>、<code>%level%</code>、<code>%equipment_name%</code>。广播支持 <code>{player}</code>、<code>{level}</code>、<code>{equipment_name}</code>。这两套括号不一样，别写混。</p>
+
+            <div class="callout callout-warn">
+              <strong>attributes 是整组替换</strong>
+              <p>2 级不要只写“新增一行”。每个等级的 <code>attributes</code> 都应该是这一级完整的属性列表，插件会移除上一级旧属性并写入新列表。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="first-attempt" data-title="跑通第一次强化" data-group="开始使用" hidden>
+            <header class="page-head">
+              <p class="eyebrow">开始使用</p>
+              <h1>跑通第一次强化</h1>
+              <p class="lead">这一页只做一件事：用默认配置从 0 强化到 1。成功一次后，你会同时理解装备识别、材料扣除和 Lore 更新。</p>
+            </header>
+
+            <h2 id="first-prepare">1. 准备测试装备和材料</h2>
+            <div class="code-block">
+              <div class="code-head"><span>需要 OP 权限</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls equipment default 0
+/fls material strength-stone 64
+/fls material fine-stone 64</code></pre>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>命令</th><th>你会拿到</th><th>用途</th></tr></thead>
+                <tbody>
+                  <tr><td><code>/fls equipment default 0</code></td><td>显示名为“测试武器测试”的钻石剑</td><td><code>default</code> 是方案 ID，<code>0</code> 是初始等级。</td></tr>
+                  <tr><td><code>/fls material strength-stone 64</code></td><td>64 个测试强化石</td><td>强化 1 级需要 1 个。</td></tr>
+                  <tr><td><code>/fls material fine-stone 64</code></td><td>64 个测试精炼石</td><td>2 级以后会用到。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>测试材料默认生成成石头，因为 <code>materials.yml</code> 里的 <code>material: '*'</code> 表示不限原版材质。插件实际认的是显示名和 Lore，不是你背包里的物品类型。</p>
+
+            <h2 id="first-open">2. 手持武器打开界面</h2>
+            <div class="code-block">
+              <div class="code-head"><span>玩家命令</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls open</code></pre>
+            </div>
+            <p>主手只能拿 1 件武器。如果武器堆叠成一组，插件会拒绝打开，避免强化后数量无法判断。</p>
+
+            <h2 id="first-put">3. 把强化石放进材料槽</h2>
+            <p>默认界面中，装备在第 <code>13</code> 格，材料区是第 <code>19</code> 到 <code>25</code> 格，执行按钮在第 <code>40</code> 格。槽位从 0 开始，所以 19 就是第四行第二格。</p>
+            <p>把 <code>测试强化石</code> 放进材料区。上方纸张会显示当前等级、目标等级、成功率、费用和所需材料；按钮会显示同样的关键信息。</p>
+
+            <h2 id="first-click">4. 点击“点击强化”</h2>
+            <p>1 级成功率是 100%，费用 100 金币，需要 1 个 <code>strength-stone</code>。条件满足时会直接成功。</p>
+            <div class="before-after">
+              <div><span>强化前 Lore</span><p><code>强化强度 [□□□□□□□□□□]</code></p></div>
+              <div><span>强化后 Lore</span><p><code>强化强度 [■■□□□□□□□□]</code></p></div>
+            </div>
+            <p>装备下方还会出现方案中配置的属性文本，例如：</p>
+            <div class="plain-example">
+              <code>&amp;a攻击力: &amp;c+1</code>
+              <code>&amp;a生命值: &amp;c+2</code>
+            </div>
+
+            <div class="callout callout-warn">
+              <strong>属性文本不会修改原版攻击力</strong>
+              <p><code>attributes</code> 只负责写 Lore。要让这些数字真的影响战斗，需要通过 <code>success-commands</code> 对接属性、技能或其他 RPG 插件；如果你的服务端只看 Lore，也应按实际玩法设计数值。</p>
+            </div>
+
+            <h2 id="first-close">5. 关闭界面</h2>
+            <p>按 Esc 关闭。装备、剩余材料、保护材料和概率材料会被退回背包；背包满时掉落在玩家脚下。装饰玻璃、按钮和信息纸张不会退给玩家。</p>
+          </section>
+
+          <section class="wiki-page" id="config" data-title="主配置 config.yml" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>主配置 config.yml</h1>
+              <p class="lead">这里管的是插件整体行为：经济要不要启用、连点冷却多久、重载时怎么处理已打开的界面。它不负责具体强化概率，概率在 <code>recipes</code> 里。</p>
+            </header>
+
+            <h2 id="config-full">完整默认配置</h2>
+            <div class="code-block">
+              <div class="code-head"><span>plugins/FlStrengthen/config.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>settings:
+  action-cooldown-ms: 300
+  close-sessions-on-reload: true
+  debug: false
+
+economy:
+  enabled: true
+
+gui:
+  strengthen-layout: strengthen.yml
+  advance-layout: advance.yml
+
+files:
+  messages: messages.yml</code></pre>
+            </div>
+
+            <h2 id="config-settings">字段解释</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>默认</th><th>人话解释</th></tr></thead>
+                <tbody>
+                  <tr><td><code>action-cooldown-ms</code></td><td><code>300</code></td><td>同一个玩家两次点击执行按钮之间至少隔多久，单位是毫秒。它用于挡住高频连点。</td></tr>
+                  <tr><td><code>close-sessions-on-reload</code></td><td><code>true</code></td><td>重载配置前先关闭所有强化界面并退还物品，避免玩家继续操作旧配置。</td></tr>
+                  <tr><td><code>debug</code></td><td><code>false</code></td><td>开启后，交易异常会把完整堆栈打印到控制台。排查问题时临时改 <code>true</code>。</td></tr>
+                  <tr><td><code>economy.enabled</code></td><td><code>true</code></td><td>是否真的收取 <code>fee</code>。开启后需要 Vault 和可用的经济插件。</td></tr>
+                  <tr><td><code>gui.strengthen-layout</code></td><td><code>strengthen.yml</code></td><td>强化界面读取 <code>gui/</code> 下的哪个文件。</td></tr>
+                  <tr><td><code>gui.advance-layout</code></td><td><code>advance.yml</code></td><td>进阶界面读取 <code>gui/</code> 下的哪个文件。</td></tr>
+                  <tr><td><code>files.messages</code></td><td><code>messages.yml</code></td><td>提示消息文件的位置。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="config-economy">经济开关怎么选</h2>
+            <div class="compare-grid">
+              <div>
+                <h3>有 Vault 经济</h3>
+                <p>保持 <code>true</code>。强化和进阶会检查余额、扣除费用；扣款失败时不会继续消耗材料。</p>
+              </div>
+              <div>
+                <h3>不用金币</h3>
+                <p>改为 <code>false</code>。所有方案照常运行，但不会检查或扣除金币。</p>
+              </div>
+            </div>
+            <div class="callout callout-info">
+              <strong>费用预览与真实扣款是两件事</strong>
+              <p>关闭经济后，真实扣款为 0。当前版本的界面 <code>%money%</code> 仍按方案里的 <code>fee</code> 显示配置数字，因此测试时不要只凭按钮上的金币数字判断是否扣款。</p>
+            </div>
+
+            <h2 id="config-reload">什么时候需要重载</h2>
+            <p>改完任意 YAML 后，在游戏内或控制台执行：</p>
+            <div class="code-block">
+              <div class="code-head"><span>管理员命令</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>/fls reload</code></pre>
+            </div>
+            <p>成功时会提示重新加载了多少个强化方案和进阶方案。看到“配置重载失败”时，保留旧运行数据并检查控制台；常见原因是 YAML 缩进错误、概率写成文本、引用了不存在的材料 ID，或强化等级没有从 1 连续写满。</p>
+            <div class="callout callout-warn">
+              <strong>改 JAR 不靠 reload</strong>
+              <p><code>/fls reload</code> 只重读配置文件。替换插件 JAR 后必须完整重启服务端。</p>
+            </div>
+          </section>
+
+          <section class="wiki-page" id="install" data-title="安装与兼容" data-group="开始使用" hidden>
+            <header class="page-head">
+              <p class="eyebrow">开始使用</p>
+              <h1>安装与兼容</h1>
+              <p class="lead">插件只调用 Bukkit API，不使用 NMS，因此同一份 JAR 可以覆盖 1.12 到 1.20 的服务端。材质名、Lore 和界面都按服务端当前版本解析。</p>
+            </header>
+
+            <h2 id="install-support">支持范围</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>项目</th><th>支持情况</th><th>说明</th></tr></thead>
+                <tbody>
+                  <tr><td>Minecraft</td><td>1.12 - 1.20</td><td>使用 Spigot 1.12.2 API 编译，产物为 Java 8 字节码。</td></tr>
+                  <tr><td>服务端</td><td>Paper / Mohist / Spigot</td><td>适用于保留 Bukkit API 的服务端。</td></tr>
+                  <tr><td>实测启动</td><td>Paper 1.12.2、1.20.1</td><td>两端均完成加载与默认配置生成验证。</td></tr>
+                  <tr><td>经济</td><td>Vault 可选</td><td>不用经济时关闭 <code>economy.enabled</code> 即可。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Paper 1.20 看到“插件未声明 api-version”的提示属于预期现象。为了兼容 1.12，<code>plugin.yml</code> 故意没有写这个新版字段。</p>
+
+            <h2 id="install-steps">安装步骤</h2>
+            <ol class="steps">
+              <li><strong>放入服务端</strong><p>把 <code>target/FlStrengthen-1.0.0.jar</code> 放进服务端的 <code>plugins/</code> 目录。</p></li>
+              <li><strong>完全重启</strong><p>第一次安装不要只执行 reload，停止服务端后重新启动。</p></li>
+              <li><strong>检查控制台</strong><p>应看到加载了 1 个强化方案和 1 个进阶方案。</p></li>
+              <li><strong>选择经济模式</strong><p>有 Vault 就保持默认；没有 Vault 就关闭经济检查。</p></li>
+            </ol>
+
+            <h2 id="install-files">第一次启动生成的文件</h2>
+            <div class="file-tree" aria-label="插件配置目录">
+              <p><span class="folder">plugins/FlStrengthen/</span></p>
+              <p>├─ <span class="file">config.yml</span><small>总开关</small></p>
+              <p>├─ <span class="file">messages.yml</span><small>提示文字</small></p>
+              <p>├─ <span class="file">materials.yml</span><small>物品身份表</small></p>
+              <p>├─ <span class="folder">recipes/</span><small>每个文件一个强化方案</small></p>
+              <p>├─ <span class="folder">advancements/</span><small>进阶方案</small></p>
+              <p>└─ <span class="folder">gui/</span><small>界面布局</small></p>
+            </div>
+
+            <h2 id="install-economy">没有 Vault 怎么办</h2>
+            <div class="code-block">
+              <div class="code-head"><span>plugins/FlStrengthen/config.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>economy:
+  enabled: false</code></pre>
+            </div>
+            <p>关闭后，插件不会扣除金币，也不会因为缺少经济服务拦截强化。方案里的 <code>fee</code> 仍可保留，方便以后重新启用经济。</p>
+
+            <h2 id="install-update">更新插件时</h2>
+            <p>替换 JAR 后完整重启最稳妥。只改 YAML 时可以使用 <code>/fls reload</code>；默认会先关闭所有已打开的强化界面，并把玩家的装备和材料退回背包，避免旧界面继续引用旧配置。</p>
+            <div class="callout callout-info">
+              <strong>不要直接删除配置目录做“升级”</strong>
+              <p>插件不会覆盖已经存在的 YAML。想保留你的方案、材料 ID 和玩家装备识别规则，就先备份再修改。</p>
+            </div>
+          </section>
+
+        </div>
+        <aside class="toc" id="toc" aria-label="本页目录">
+          <p>本页内容</p>
+          <nav id="toc-links"></nav>
+        </aside>
+      </div>
+      <footer class="page-footer">
+        <span>FlStrengthen v1.0.0 · Minecraft 1.12 - 1.20</span>
+        <span>配置目录：<code>plugins/FlStrengthen/</code></span>
+      </footer>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fenlingboy.github.io/minecraft-wiki/sitemap.xml
