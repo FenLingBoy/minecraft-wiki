@@ -23,7 +23,7 @@
       <kbd class="search-key">/</kbd>
       <div class="search-results" id="search-results" hidden></div>
     </div>
-    <span class="version-badge">v1.1.0</span>
+    <span class="version-badge">v1.2.0</span>
   </header>
   <div class="shell">
     <div class="sidebar-scrim" id="sidebar-scrim"></div>
@@ -37,6 +37,7 @@
         <a class="nav-link" href="#config" data-page="config">主配置 config.yml</a>
         <a class="nav-link" href="#materials" data-page="materials">材料 materials.yml</a>
         <a class="nav-link" href="#recipes" data-page="recipes">强化方案 recipes</a>
+        <a class="nav-link" href="#direct-upgrades" data-page="direct-upgrades">装备直升 direct-upgrades</a>
         <a class="nav-link" href="#advancements" data-page="advancements">进阶方案 advancements</a>
         <a class="nav-link" href="#gui" data-page="gui">界面 gui</a>
         <p class="nav-label">参考</p>
@@ -47,7 +48,7 @@
       </nav>
       <div class="sidebar-foot">
         <span>构建产物</span>
-        <code>target/FlStrengthen-1.1.0.jar</code>
+        <code>target/FlStrengthen-1.2.0.jar</code>
       </div>
     </aside>
     <main class="content" id="article-host">
@@ -75,7 +76,7 @@
             <h2 id="quick-flow">玩家实际会经历什么</h2>
             <ol class="flow-list">
               <li><span>1</span><div><strong>手持装备</strong><p>主手只能拿 1 件，并且名字要命中某个强化方案。</p></div></li>
-              <li><span>2</span><div><strong>输入命令</strong><p>执行 <code>/fls open</code>，装备会暂时放进强化界面。</p></div></li>
+              <li><span>2</span><div><strong>选择功能</strong><p>执行 <code>/fls open</code>，选择普通强化、装备直升或装备进阶。</p></div></li>
               <li><span>3</span><div><strong>放入材料</strong><p>必需材料、保护材料、概率加成材料分别放进对应槽位。</p></div></li>
               <li><span>4</span><div><strong>点击强化</strong><p>插件检查金币与材料，然后抽随机数并结算结果。</p></div></li>
             </ol>
@@ -86,7 +87,8 @@
               <div class="code-head"><span>游戏内依次执行</span><button class="copy-button" type="button">复制</button></div>
               <pre><code>/fls equipment default 0
 /fls material strength-stone 64
-/fls material fine-stone 64</code></pre>
+/fls material fine-stone 64
+/fls directitem level-3-ticket 1</code></pre>
             </div>
             <p>拿到“测试武器”和两种测试材料后，手持武器执行：</p>
             <div class="code-block">
@@ -227,20 +229,82 @@
             <p><code>break-on-failure: false</code> 时，旧装备保留，材料和金币正常消耗。<code>true</code> 时会先检查损坏保护；保护失败则装备消失。进阶没有“失败降级到某个强度”的配置。</p>
           </section>
 
+          <section class="wiki-page" id="direct-upgrades" data-title="装备直升 direct-upgrades" data-group="配置手册" hidden>
+            <header class="page-head">
+              <p class="eyebrow">配置手册</p>
+              <h1>装备直升 direct-upgrades</h1>
+              <p class="lead">直升是第三个独立界面：把武器和直升券放进去，点击后不抽成功率，直接把武器 Lore 写到这张券指定的强化等级。</p>
+            </header>
+
+            <div class="callout callout-key">
+              <strong>它和普通强化差在哪</strong>
+              <p>普通强化一次只尝试下一级，受成功率和失败分支影响。直升是确定性结果，只检查武器方案、直升券、数量、等级和费用。</p>
+            </div>
+
+            <h2 id="direct-flow">玩家怎么用</h2>
+            <ol class="flow-list">
+              <li><span>1</span><div><strong>打开选择页</strong><p>执行 <code>/fls open</code>，点击“装备直升”；也可以直接执行 <code>/fls direct</code>。</p></div></li>
+              <li><span>2</span><div><strong>放入武器</strong><p>武器可以手持进入，也可以在直升界面里直接放入或替换。数量必须是 1。</p></div></li>
+              <li><span>3</span><div><strong>放入直升道具</strong><p>直升槽只接受 <code>direct-upgrades.yml</code> 中登记，并且绑定当前强化方案的道具。</p></div></li>
+              <li><span>4</span><div><strong>点击直升</strong><p>插件读取券上的目标等级，直接更新 Lore、扣除道具与费用，并执行成功命令。</p></div></li>
+            </ol>
+
+            <h2 id="direct-example">完整配置示例</h2>
+            <div class="code-block">
+              <div class="code-head"><span>direct-upgrades.yml</span><button class="copy-button" type="button">复制</button></div>
+              <pre><code>direct-upgrades:
+  level-3-ticket:
+    item:
+      material: '*'
+      display-name: '&amp;6直升券·三级%p%'
+      lore-contains:
+        - '&amp;7使用后直接将武器提升到 &amp;e3 &amp;7级'
+    strength-recipe: default
+    target-level: 3
+    consume-amount: 1
+    fee: 0
+    success-commands:
+      - '[console] say %player% 使用直升券到达 %level% 级'
+    broadcast: '&amp;6{player} &amp;7将 &amp;f{equipment_name} &amp;7直升到 &amp;e{level} &amp;7级！'</code></pre>
+            </div>
+
+            <h2 id="direct-fields">每个字段在说什么</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>字段</th><th>作用</th></tr></thead>
+                <tbody>
+                  <tr><td><code>item.material</code></td><td>限制原版材质，<code>*</code> 表示不限制。</td></tr>
+                  <tr><td><code>item.display-name</code></td><td>显示名匹配，<code>%p%</code> 可匹配编号或活动名等任意片段。</td></tr>
+                  <tr><td><code>item.lore-contains</code></td><td>必须同时出现的 Lore 文本，用来防止同名普通物品冒充。</td></tr>
+                  <tr><td><code>strength-recipe</code></td><td>只能用于哪个强化方案，例如 <code>default</code>。</td></tr>
+                  <tr><td><code>target-level</code></td><td>直升后的等级，不能超过方案的 <code>max-level</code>。</td></tr>
+                  <tr><td><code>consume-amount</code></td><td>一次消耗几张券；数量不足时不会执行。</td></tr>
+                  <tr><td><code>fee</code></td><td>直升金币费用；经济关闭时视为 0。</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="direct-security">为什么名字和 Lore 都要写</h2>
+            <p>只写显示名时，玩家可能用铁砧改出同名普通物品。把 <code>material</code> 和专属 <code>lore-contains</code> 一起写上，识别结果才稳定。武器当前等级达到或高于券的目标等级时，插件会拒绝执行，也不会吃掉券。</p>
+            <p>成功命令中的 <code>%level%</code> 是目标等级，<code>%equipment_name%</code> 是武器显示名。命令默认按控制台执行，也支持 <code>[player]</code>；<code>[op]</code> 会被阻断。</p>
+          </section>
+
           <section class="wiki-page" id="gui" data-title="界面 gui" data-group="配置手册" hidden>
             <header class="page-head">
               <p class="eyebrow">配置手册</p>
               <h1>界面 gui</h1>
-              <p class="lead">强化和进阶各有一个界面布局文件。槽位数字与 Bukkit 背包一致，从 0 开始：第一行第一格是 0，第一行第九格是 8，第二行第一格是 9。</p>
+              <p class="lead">选择页、普通强化、装备直升和进阶各有一个布局文件。槽位数字与 Bukkit 背包一致，从 0 开始：第一行第一格是 0，第一行第九格是 8，第二行第一格是 9。</p>
             </header>
 
-            <h2 id="gui-files">两个文件，同一套结构</h2>
+            <h2 id="gui-files">布局文件怎么分工</h2>
             <div class="file-tree">
               <p><span class="folder">plugins/FlStrengthen/gui/</span></p>
-              <p>├─ <span class="file">strengthen.yml</span><small>/fls open</small></p>
+              <p>├─ <span class="file">selector.yml</span><small>/fls open</small></p>
+              <p>├─ <span class="file">strengthen.yml</span><small>/fls strengthen</small></p>
+              <p>├─ <span class="file">direct.yml</span><small>/fls direct</small></p>
               <p>└─ <span class="file">advance.yml</span><small>/fls advance</small></p>
             </div>
-            <p>文件名由 <code>config.yml</code> 里的 <code>gui.strengthen-layout</code> 和 <code>gui.advance-layout</code> 决定。想换界面风格时，可以复制一份再切文件名。</p>
+            <p>文件名由 <code>config.yml</code> 里的 <code>gui.selector-layout</code>、<code>gui.strengthen-layout</code>、<code>gui.direct-layout</code> 和 <code>gui.advance-layout</code> 决定。选择页的 <code>options</code> 用 <code>slot</code>、<code>mode</code>、<code>permission</code> 和 <code>item</code> 配置按钮。</p>
 
             <h2 id="gui-map">默认 54 格界面地图</h2>
             <div class="slot-map-wrap">
@@ -267,7 +331,7 @@
                   <tr><td><code>material-slots</code></td><td><code>[19...25]</code></td><td>必需材料可以放入的范围。</td></tr>
                   <tr><td><code>protection-slots</code></td><td><code>[29, 30]</code></td><td>损坏保护和降级保护共用这些格子。</td></tr>
                   <tr><td><code>boost-slots</code></td><td><code>[32, 33]</code></td><td>概率加成材料槽。</td></tr>
-                  <tr><td><code>button-slot</code></td><td><code>40</code></td><td>点击后执行强化或进阶的格子。</td></tr>
+                  <tr><td><code>button-slot</code></td><td><code>40</code></td><td>点击后执行普通强化、装备直升或进阶的格子。</td></tr>
                   <tr><td><code>message-slots</code></td><td><code>[4]</code></td><td>动态信息物品显示的格子，可以配多个。</td></tr>
                 </tbody>
               </table>
@@ -423,10 +487,13 @@ message-item:
               <table>
                 <thead><tr><th>命令</th><th>权限</th><th>用途</th></tr></thead>
                 <tbody>
-                  <tr><td><code>/fls open</code></td><td><code>flstrengthen.use</code></td><td>打开主手装备的强化界面。</td></tr>
+                  <tr><td><code>/fls open</code></td><td><code>flstrengthen.use</code></td><td>打开普通强化、装备直升、装备进阶的选择页。</td></tr>
+                  <tr><td><code>/fls strengthen</code></td><td><code>flstrengthen.use</code></td><td>跳过选择页，直接打开普通强化界面。</td></tr>
+                  <tr><td><code>/fls direct</code></td><td><code>flstrengthen.direct</code></td><td>打开装备直升界面。</td></tr>
                   <tr><td><code>/fls advance</code></td><td><code>flstrengthen.advance</code></td><td>打开主手装备的进阶界面。</td></tr>
                   <tr><td><code>/fls material &lt;ID&gt; [数量]</code></td><td><code>flstrengthen.admin</code></td><td>生成测试材料，数量限制 1 到 64。</td></tr>
                   <tr><td><code>/fls equipment &lt;方案ID&gt; [等级]</code></td><td><code>flstrengthen.admin</code></td><td>生成某个方案的测试装备。</td></tr>
+                  <tr><td><code>/fls directitem &lt;ID&gt; [数量]</code></td><td><code>flstrengthen.admin</code></td><td>生成测试直升道具。</td></tr>
                   <tr><td><code>/fls reload</code></td><td><code>flstrengthen.admin</code></td><td>关闭活动界面并重新读取全部 YAML。</td></tr>
                   <tr><td><code>/fls version</code></td><td>无</td><td>查看当前插件版本。</td></tr>
                   <tr><td><code>/fls help</code></td><td>无</td><td>显示游戏内帮助。</td></tr>
@@ -441,7 +508,8 @@ message-item:
               <pre><code>/fls equipment default 0
 /fls equipment default 5
 /fls material strength-stone 64
-/fls material chance-booster 16</code></pre>
+/fls material chance-booster 16
+/fls directitem level-3-ticket 1</code></pre>
             </div>
             <p><code>/fls equipment default 5</code> 会直接生成 5 级装备，方便测试满级提示和进阶。传入超出方案范围的等级时，插件会夹到 0 到最高等级之间。</p>
             <p><code>/fls material</code> 和 <code>/fls equipment</code> 必须由玩家执行，因为生成物会进入玩家背包。控制台可以正常执行 <code>/fls reload</code> 和 <code>/fls version</code>。</p>
@@ -449,6 +517,7 @@ message-item:
             <h2 id="commands-permissions">权限默认值</h2>
             <div class="permission-list">
               <p><code>flstrengthen.use</code><span>默认所有玩家拥有，允许打开强化界面。</span></p>
+              <p><code>flstrengthen.direct</code><span>默认所有玩家拥有，允许打开装备直升界面。</span></p>
               <p><code>flstrengthen.advance</code><span>默认所有玩家拥有，允许打开进阶界面。</span></p>
               <p><code>flstrengthen.admin</code><span>默认仅 OP 拥有，允许生成物品和重载配置。</span></p>
             </div>
@@ -457,6 +526,7 @@ message-item:
             <div class="code-block">
               <div class="code-head"><span>控制台或游戏内</span><button class="copy-button" type="button">复制</button></div>
               <pre><code>/lp group default permission set flstrengthen.use true
+/lp group default permission set flstrengthen.direct true
 /lp group default permission set flstrengthen.advance true
 /lp user Steve permission set flstrengthen.admin true</code></pre>
             </div>
@@ -999,7 +1069,9 @@ files:
                   <tr><td><code>close-sessions-on-reload</code></td><td><code>true</code></td><td>重载配置前先关闭所有强化界面并退还物品，避免玩家继续操作旧配置。</td></tr>
                   <tr><td><code>debug</code></td><td><code>false</code></td><td>开启后，交易异常会把完整堆栈打印到控制台。排查问题时临时改 <code>true</code>。</td></tr>
                   <tr><td><code>economy.enabled</code></td><td><code>true</code></td><td>是否真的收取 <code>fee</code>。开启后需要 Vault 和可用的经济插件。</td></tr>
+                  <tr><td><code>gui.selector-layout</code></td><td><code>selector.yml</code></td><td>功能选择页读取的布局文件。</td></tr>
                   <tr><td><code>gui.strengthen-layout</code></td><td><code>strengthen.yml</code></td><td>强化界面读取 <code>gui/</code> 下的哪个文件。</td></tr>
+                  <tr><td><code>gui.direct-layout</code></td><td><code>direct.yml</code></td><td>装备直升界面读取的布局文件。</td></tr>
                   <tr><td><code>gui.advance-layout</code></td><td><code>advance.yml</code></td><td>进阶界面读取 <code>gui/</code> 下的哪个文件。</td></tr>
                   <tr><td><code>files.messages</code></td><td><code>messages.yml</code></td><td>提示消息文件的位置。</td></tr>
                 </tbody>
@@ -1058,7 +1130,7 @@ files:
 
             <h2 id="install-steps">安装步骤</h2>
             <ol class="steps">
-              <li><strong>放入服务端</strong><p>把 <code>target/FlStrengthen-1.1.0.jar</code> 放进服务端的 <code>plugins/</code> 目录。</p></li>
+              <li><strong>放入服务端</strong><p>把 <code>target/FlStrengthen-1.2.0.jar</code> 放进服务端的 <code>plugins/</code> 目录。</p></li>
               <li><strong>完全重启</strong><p>第一次安装不要只执行 reload，停止服务端后重新启动。</p></li>
               <li><strong>检查控制台</strong><p>应看到加载了 1 个强化方案和 1 个进阶方案。</p></li>
               <li><strong>选择经济模式</strong><p>有 Vault 就保持默认；没有 Vault 就关闭经济检查。</p></li>
@@ -1070,6 +1142,7 @@ files:
               <p>├─ <span class="file">config.yml</span><small>总开关</small></p>
               <p>├─ <span class="file">messages.yml</span><small>提示文字</small></p>
               <p>├─ <span class="file">materials.yml</span><small>物品身份表</small></p>
+              <p>├─ <span class="file">direct-upgrades.yml</span><small>直升道具与目标等级</small></p>
               <p>├─ <span class="folder">recipes/</span><small>每个文件一个强化方案</small></p>
               <p>├─ <span class="folder">advancements/</span><small>进阶方案</small></p>
               <p>└─ <span class="folder">gui/</span><small>界面布局</small></p>
@@ -1098,7 +1171,7 @@ files:
         </aside>
       </div>
       <footer class="page-footer">
-        <span>FlStrengthen v1.1.0 · Minecraft 1.12 - 1.20</span>
+        <span>FlStrengthen v1.2.0 · Minecraft 1.12 - 1.20</span>
         <span>配置目录：<code>plugins/FlStrengthen/</code></span>
       </footer>
     </main>
